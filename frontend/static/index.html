@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS // Autonomous Cognitive Execution Plane</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="cyber-theme">
+    <div class="hud-frame">
+        <!-- Corner Reticles -->
+        <div class="corner-reticle top-left"></div>
+        <div class="corner-reticle top-right"></div>
+        <div class="corner-reticle bottom-left"></div>
+        <div class="corner-reticle bottom-right"></div>
+
+        <!-- Top Mission Navigation -->
+        <header class="hud-header">
+            <div class="brand-section">
+                <span class="brand-glyph">⬡</span>
+                <span class="brand-title">NEXUS</span>
+                <span class="brand-badge">CONTROL PLANE</span>
+            </div>
+
+            <div class="project-selector-wrapper">
+                <span class="hud-label">ACTIVE SYSTEM:</span>
+                <select id="project-select" class="hud-select">
+                    <option value="horizon_quant">📈 Horizon Quant Lab & Council</option>
+                    <option value="media_stack">🎬 CinemaScout & HolyArrs Pipeline</option>
+                    <option value="sre_sentinel">🛡️ Homelab SRE Sentinel</option>
+                </select>
+            </div>
+
+            <div class="mode-toggles">
+                <button id="btn-mode-live" class="hud-tab active">
+                    <span class="pulse-indicator live"></span> LIVE STREAM
+                </button>
+                <button id="btn-mode-replay" class="hud-tab">
+                    <span class="pulse-indicator history"></span> TIME-TRAVEL REPLAY
+                </button>
+            </div>
+
+            <div class="telemetry-bar">
+                <div class="telemetry-chip">
+                    <span class="chip-title">LINK</span>
+                    <span id="ws-status" class="chip-val status-online">CONNECTED</span>
+                </div>
+                <div class="telemetry-chip">
+                    <span class="chip-title">FPS</span>
+                    <span id="fps-counter" class="chip-val">60</span>
+                </div>
+                <div class="telemetry-chip">
+                    <span class="chip-title">CLOCK</span>
+                    <span id="hud-clock" class="chip-val monospace">--:--:--</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Replay Bar (Shown when in Replay Mode) -->
+        <div id="replay-deck" class="replay-deck hidden">
+            <div class="replay-controls">
+                <button id="replay-play-btn" class="ctrl-btn">▶ PLAY</button>
+                <button id="replay-step-back" class="ctrl-btn">⏮</button>
+                <button id="replay-step-fwd" class="ctrl-btn">⏭</button>
+                <select id="replay-session-select" class="hud-select session-picker">
+                    <option value="">Select Past Event / Session...</option>
+                </select>
+            </div>
+            <div class="replay-timeline">
+                <input type="range" id="replay-slider" min="0" max="100" value="0" class="hud-slider">
+                <div class="timeline-labels">
+                    <span id="replay-time-current">00:00.000</span>
+                    <span id="replay-event-count">0 / 0 Events</span>
+                    <span id="replay-time-total">00:00.000</span>
+                </div>
+            </div>
+            <div class="replay-speed">
+                <button class="speed-btn active" data-speed="1">1x</button>
+                <button class="speed-btn" data-speed="2">2x</button>
+                <button class="speed-btn" data-speed="5">5x</button>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Viewport -->
+        <main class="hud-viewport">
+            <!-- Left Deck: Inputs & Directives -->
+            <aside class="panel left-deck">
+                <div class="panel-header">
+                    <span class="panel-tag">[DIRECTIVES]</span>
+                    <span class="panel-title">SYSTEM INGRESS</span>
+                </div>
+                <div class="panel-content">
+                    <div class="directive-box">
+                        <div class="box-label">CURRENT BRIEF</div>
+                        <div id="ingress-brief" class="box-content monospace">Waiting for system event trigger...</div>
+                    </div>
+                    <div class="directive-box">
+                        <div class="box-label">INPUT PAYLOAD</div>
+                        <div id="ingress-payload" class="box-content monospace json-view">{}</div>
+                    </div>
+                    <div class="directive-box">
+                        <div class="box-label">ACTIVE RISK & CONSTRAINTS</div>
+                        <div id="ingress-constraints" class="box-content">
+                            <div class="param-row"><span>Loss Limit:</span> <strong class="text-amber">₹25,000</strong></div>
+                            <div class="param-row"><span>Max Execution Latency:</span> <strong>50ms</strong></div>
+                            <div class="param-row"><span>Gate Policy:</span> <strong class="text-green">STRICT_AUDIT</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Stage: The Neural Canvas Graph -->
+            <section class="panel center-stage">
+                <div class="panel-header">
+                    <span class="panel-tag">[COGNITIVE GRAPH]</span>
+                    <span class="panel-title">TOPOLOGY & EXECUTION STREAM</span>
+                    <span id="graph-node-count" class="badge-mini">0 NODES</span>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="neuralCanvas"></canvas>
+                </div>
+            </section>
+
+            <!-- Right Deck: Micro-Agent Bento Grid -->
+            <aside class="panel right-deck">
+                <div class="panel-header">
+                    <span class="panel-tag">[WORKERS]</span>
+                    <span class="panel-title">AGENT STATUS MATRIX</span>
+                </div>
+                <div id="bento-container" class="panel-content bento-grid">
+                    <!-- Dynamic Bento Cards Injected Here -->
+                </div>
+            </aside>
+        </main>
+
+        <!-- Bottom Deck: Dynamic Matrix & Streaming Console -->
+        <footer class="hud-bottom-deck">
+            <!-- Left Sub-panel: N-Cell Execution Heatmap -->
+            <div class="bottom-panel matrix-panel">
+                <div class="panel-header">
+                    <span class="panel-tag">[MATRIX]</span>
+                    <span id="matrix-title" class="panel-title">EXECUTION HEATMAP</span>
+                </div>
+                <div id="matrix-grid" class="matrix-grid-container">
+                    <!-- Dynamic 24-cell matrix injected here -->
+                </div>
+            </div>
+
+            <!-- Right Sub-panel: Live Streaming Terminal -->
+            <div class="bottom-panel terminal-panel">
+                <div class="panel-header">
+                    <span class="panel-tag">[TELEMETRY CONSOLE]</span>
+                    <span class="panel-title">EVENT LOG STREAM</span>
+                    <button id="btn-clear-log" class="btn-text">CLEAR</button>
+                </div>
+                <div id="terminal-stream" class="terminal-container monospace">
+                    <!-- Streaming log entries injected here -->
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/neural_graph.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

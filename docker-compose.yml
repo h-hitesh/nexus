@@ -1,0 +1,25 @@
+services:
+  nexus:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexus
+    restart: unless-stopped
+    ports:
+      - "8500:8500"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - NEXUS_DB_PATH=/home/hitesh/nexus/data/nexus.db
+    volumes:
+      - ./data:/home/hitesh/nexus/data
+      - ./frontend/static:/home/hitesh/nexus/frontend/static
+      - ./backend/app:/app/backend/app
+    networks:
+      - default
+      - ai_net
+
+networks:
+  default:
+  ai_net:
+    external: true
+    name: ai-stack_default
