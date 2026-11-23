@@ -461,7 +461,7 @@ body.modern-cyber-body {
 }
 
 /* Center Stage Canvas Panel */
-.center-canvas-panel {
+.center-canvas-panel { height: 100%; min-height: 380px;
     position: relative;
     background: #05070a;
     border: 1px solid var(--border-subtle);
