@@ -4,221 +4,458 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEXUS // Autonomous Multi-System Execution Plane</title>
+    <!-- Modern Typography: Inter + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?v=4">
 </head>
-<body class="modern-cyber-body">
-    <!-- Ambient Radial Glows -->
-    <div class="ambient-glow glow-top"></div>
-    <div class="ambient-glow glow-bottom"></div>
-
-    <div class="app-shell">
-        <!-- Top Glass Navigation Bar -->
-        <header class="glass-header">
-            <div class="header-left">
-                <div class="brand-container">
-                    <div class="brand-icon-box">
-                        <span class="brand-logo-hex">⬡</span>
-                    </div>
-                    <div class="brand-text-block">
-                        <span class="brand-title">NEXUS</span>
-                        <span class="brand-subtitle">AI OS // EXECUTION PLANE</span>
-                    </div>
+<body class="nexus-app">
+    <div class="mission-control-shell">
+        <!-- 1. TOP CONTROL BAR -->
+        <header class="top-nav-bar">
+            <div class="nav-brand-section">
+                <div class="brand-badge">
+                    <span class="brand-glyph">⬡</span>
+                    <span class="brand-title">NEXUS</span>
                 </div>
-
-                <!-- Modern Segmented Pill Control (NO DROPDOWN!) -->
-                <nav class="pipeline-nav">
-                    <button class="nav-pill active" data-flow="all">
-                        <span class="pill-dot all"></span> All Systems
-                    </button>
-                    <button class="nav-pill" data-flow="telegram">
-                        <span class="pill-dot tg"></span> Telegram AI OS
-                    </button>
-                    <button class="nav-pill" data-flow="horizon">
-                        <span class="pill-dot quant"></span> Horizon Quant
-                    </button>
-                    <button class="nav-pill" data-flow="media">
-                        <span class="pill-dot media"></span> HolyArrs Media
-                    </button>
-                    <button class="nav-pill" data-flow="sre">
-                        <span class="pill-dot sre"></span> SRE Sentinel
-                    </button>
-                </nav>
+                <span class="sub-brand">EXECUTION PLANE v1.0</span>
+                <div class="system-health-pill">
+                    <span class="health-pulse"></span>
+                    <span id="meshStatusText">MESH SYNCHRONIZED</span>
+                    <span class="metric-divider">|</span>
+                    <span class="metric-val text-amber" id="linkLatency">1.2ms</span>
+                </div>
             </div>
 
-            <div class="header-right">
-                <!-- Mode Switcher Pill -->
-                <div class="segmented-mode">
-                    <button id="btn-mode-live" class="mode-btn active">
-                        <span class="live-dot"></span> LIVE
-                    </button>
-                    <button id="btn-mode-replay" class="mode-btn">
-                        <span>⏱ REPLAY</span>
-                    </button>
+            <!-- Flow Filter Switchers -->
+            <div class="nav-filters">
+                <div class="segmented-control" id="systemFilterGroup">
+                    <button class="seg-btn active" data-system="all">ALL SYSTEMS</button>
+                    <button class="seg-btn" data-system="telegram"><span class="dot-tg"></span>TELEGRAM AI OS</button>
+                    <button class="seg-btn" data-system="horizon"><span class="dot-horizon"></span>HORIZON QUANT</button>
+                    <button class="seg-btn" data-system="holyarrs"><span class="dot-holyarrs"></span>HOLYARRS MEDIA</button>
+                    <button class="seg-btn" data-system="sre"><span class="dot-sre"></span>SRE SENTINEL</button>
                 </div>
+            </div>
 
-                <div class="system-stats-cluster">
-                    <div class="stat-pill">
-                        <span class="stat-label">STATUS</span>
-                        <span id="ws-status" class="stat-value status-online">CONNECTED</span>
-                    </div>
-                    <div class="stat-pill">
-                        <span class="stat-label">CLOCK</span>
-                        <span id="hud-clock" class="stat-value monospace">--:--:--</span>
-                    </div>
+            <!-- Mode & Clock -->
+            <div class="nav-status-section">
+                <div class="mode-toggles">
+                    <button class="mode-pill active" id="btnLive"><span class="live-dot"></span>LIVE</button>
+                    <button class="mode-pill" id="btnReplay">REPLAY</button>
                 </div>
+                <div class="clock-display" id="systemClock">--:--:-- IST</div>
             </div>
         </header>
 
-        <!-- Floating Time-Travel Replay Bar (Glass Bar) -->
-        <div id="replay-bar" class="replay-glass-bar hidden">
-            <div class="replay-inner">
-                <div class="replay-actions">
-                    <button id="replay-play-btn" class="replay-action-btn primary">
-                        <span id="play-icon">▶</span> <span id="play-text">PLAY</span>
-                    </button>
-                    <button id="replay-step-back" class="replay-action-btn icon-only">⏮</button>
-                    <button id="replay-step-fwd" class="replay-action-btn icon-only">⏭</button>
-                    <div class="custom-select-wrapper">
-                        <select id="replay-session-select" class="glass-select">
-                            <option value="">Select past execution session...</option>
-                        </select>
+        <!-- 2. MAIN 3-ZONE HIGH-DENSITY WORKSPACE -->
+        <div class="main-workspace">
+            <!-- Left Deck: Ingress & Fleet KPIs (240px) -->
+            <aside class="left-deck">
+                <div class="deck-section-title">INGRESS & INGESTION DIRECTIVES</div>
+                
+                <!-- Quick KPI Bento Cards -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">ACTIVE ENGINES</span>
+                        <span class="kpi-status-badge">4 / 4 ONLINE</span>
                     </div>
-                </div>
-
-                <div class="replay-scrubber-track">
-                    <div class="scrubber-top">
-                        <span id="replay-session-name" class="session-label">Session: None</span>
-                        <span id="replay-event-counter" class="event-counter">0 / 0 Events</span>
-                    </div>
-                    <input type="range" id="replay-slider" min="0" max="100" value="0" class="neon-slider">
-                </div>
-
-                <div class="replay-speed-group">
-                    <button class="speed-pill active" data-speed="1">1x</button>
-                    <button class="speed-pill" data-speed="2">2x</button>
-                    <button class="speed-pill" data-speed="5">5x</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Master Viewport Grid -->
-        <main class="master-viewport">
-            <!-- Left Directive & Telemetry Cards -->
-            <aside class="sidebar-deck left-side">
-                <div class="glass-card full-height">
-                    <div class="card-header">
-                        <span class="header-tag">INGRESS</span>
-                        <h3 class="header-heading">Flow Directive</h3>
-                        <span id="active-flow-badge" class="flow-pill-badge">ALL SYSTEMS</span>
-                    </div>
-                    <div class="card-body scrollable">
-                        <div class="directive-block">
-                            <label class="section-label">ACTIVE OBJECTIVE</label>
-                            <p id="ingress-brief" class="directive-text">
-                                Monitoring unified homelab neural mesh across Telegram AI OS, Horizon Quant Council, HolyArrs Media Pipeline, and SRE Sentinel.
-                            </p>
+                    <div class="kpi-metrics-row">
+                        <div class="kpi-item">
+                            <span class="kpi-lbl">TOTAL NODES</span>
+                            <span class="kpi-val" id="statTotalNodes">14</span>
                         </div>
+                        <div class="kpi-item">
+                            <span class="kpi-lbl">THROUGHPUT</span>
+                            <span class="kpi-val text-cyan" id="statThroughput">38 req/s</span>
+                        </div>
+                    </div>
+                </div>
 
-                        <div class="directive-block">
-                            <label class="section-label">LIVE FLOW METRICS</label>
-                            <div class="metric-tiles-grid">
-                                <div class="metric-mini-tile">
-                                    <span class="tile-label">FLOW NODES</span>
-                                    <span id="stat-node-count" class="tile-val">18</span>
+                <!-- System Ingress Status Cards -->
+                <div class="ingress-list">
+                    <div class="ingress-tile" data-system="telegram">
+                        <div class="tile-bar-tg"></div>
+                        <div class="tile-content">
+                            <div class="tile-title">Telegram Long-Polling</div>
+                            <div class="tile-meta">Bot: CinemaScout | ID: 1119935406</div>
+                            <div class="tile-status text-emerald">Polling active (340ms)</div>
+                        </div>
+                    </div>
+
+                    <div class="ingress-tile" data-system="horizon">
+                        <div class="tile-bar-horizon"></div>
+                        <div class="tile-content">
+                            <div class="tile-title">Horizon Kafka Feed</div>
+                            <div class="tile-meta">Broker: Redpanda | NIFTY 50</div>
+                            <div class="tile-status text-emerald">Tick stream synchronized</div>
+                        </div>
+                    </div>
+
+                    <div class="ingress-tile" data-system="holyarrs">
+                        <div class="tile-bar-holyarrs"></div>
+                        <div class="tile-content">
+                            <div class="tile-title">HolyArrs Media Gateway</div>
+                            <div class="tile-meta">Port :6262 | Consolidated</div>
+                            <div class="tile-status text-emerald">940 MiB RAM saved</div>
+                        </div>
+                    </div>
+
+                    <div class="ingress-tile" data-system="sre">
+                        <div class="tile-bar-sre"></div>
+                        <div class="tile-content">
+                            <div class="tile-title">Docker Socket Poller</div>
+                            <div class="tile-meta">Path: /var/run/docker.sock</div>
+                            <div class="tile-status text-emerald">28/28 containers healthy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Persistence Info -->
+                <div class="persistence-footer">
+                    <div class="pers-row">
+                        <span>WAL STORAGE:</span>
+                        <span class="text-emerald">ACTIVE</span>
+                    </div>
+                    <div class="pers-row">
+                        <span>DB PATH:</span>
+                        <span class="text-muted font-mono">nexus.db</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center DAG Stage: 4-Stage Horizontal Pipeline Visualizer -->
+            <main class="dag-stage" id="dagStage">
+                <!-- SVG Connector Canvas Layer -->
+                <svg class="dag-svg-canvas" id="dagSvgCanvas"></svg>
+
+                <!-- 4 Stage Columns -->
+                <div class="pipeline-columns">
+                    <!-- Column 1: INGRESS -->
+                    <div class="stage-column" data-stage-id="ingress">
+                        <div class="stage-header">
+                            <span class="stage-num">01</span>
+                            <span class="stage-name">INGRESS SOURCES</span>
+                        </div>
+                        <div class="nodes-container">
+                            <!-- Telegram Ingress Node -->
+                            <div class="dag-node" id="node-tg_ingress" data-system="telegram" data-title="telegram.ingress">
+                                <div class="node-badge badge-ingress">INGRESS</div>
+                                <div class="node-title">telegram.ingress</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>chat_id</span><strong>1119935406</strong></div>
+                                    <div class="p-row"><span>bot_name</span><strong>CinemaScout</strong></div>
+                                    <div class="p-row"><span>mode</span><strong class="text-emerald">long-polling</strong></div>
                                 </div>
-                                <div class="metric-mini-tile">
-                                    <span class="tile-label">LINK LATENCY</span>
-                                    <span class="tile-val text-green">1.2 ms</span>
+                                <div class="node-port port-out" id="port-out-tg_ingress"></div>
+                            </div>
+
+                            <!-- Horizon Ticks Node -->
+                            <div class="dag-node" id="node-horizon_ticks" data-system="horizon" data-title="horizon.ticks">
+                                <div class="node-badge badge-ingress">INGRESS</div>
+                                <div class="node-title">horizon.ticks</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>broker</span><strong>Redpanda</strong></div>
+                                    <div class="p-row"><span>symbol</span><strong>NIFTY 50</strong></div>
+                                    <div class="p-row"><span>last_tick</span><strong class="text-emerald">22,482.80</strong></div>
                                 </div>
-                                <div class="metric-mini-tile">
-                                    <span class="tile-label">EVENT PULSES</span>
-                                    <span id="stat-pulse-count" class="tile-val text-cyan">42</span>
+                                <div class="node-port port-out" id="port-out-horizon_ticks"></div>
+                            </div>
+
+                            <!-- Docker Socket Node -->
+                            <div class="dag-node" id="node-docker_socket" data-system="sre" data-title="docker.socket">
+                                <div class="node-badge badge-ingress">INGRESS</div>
+                                <div class="node-title">docker.socket</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>socket</span><strong>/var/run/docker</strong></div>
+                                    <div class="p-row"><span>monitored</span><strong>28 containers</strong></div>
+                                    <div class="p-row"><span>status</span><strong class="text-emerald">listening</strong></div>
                                 </div>
-                                <div class="metric-mini-tile">
-                                    <span class="tile-label">AI ENGINE</span>
-                                    <span class="tile-val text-amber">Qwen 14B</span>
+                                <div class="node-port port-out" id="port-out-docker_socket"></div>
+                            </div>
+
+                            <!-- Cron Briefing Node -->
+                            <div class="dag-node" id="node-cron_briefing" data-system="telegram" data-title="n8n.cron_briefing">
+                                <div class="node-badge badge-ingress">INGRESS</div>
+                                <div class="node-title">n8n.cron_briefing</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>schedule</span><strong>08:00 AM IST</strong></div>
+                                    <div class="p-row"><span>target</span><strong>morning_news</strong></div>
+                                    <div class="p-row"><span>state</span><strong class="text-emerald">ready</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-cron_briefing"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: ROUTER & POLICIES -->
+                    <div class="stage-column" data-stage-id="routing">
+                        <div class="stage-header">
+                            <span class="stage-num">02</span>
+                            <span class="stage-name">ROUTING & POLICIES</span>
+                        </div>
+                        <div class="nodes-container">
+                            <!-- Qwen Intent Router -->
+                            <div class="dag-node" id="node-intent_router" data-system="telegram" data-title="intent.router">
+                                <div class="node-port port-in" id="port-in-intent_router"></div>
+                                <div class="node-badge badge-router">ROUTER</div>
+                                <div class="node-title">intent.router</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>model</span><strong>qwen2.5:14b</strong></div>
+                                    <div class="p-row"><span>gpu</span><strong class="text-amber">Radeon 890M</strong></div>
+                                    <div class="p-row"><span>latency</span><strong>320ms</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-intent_router"></div>
+                            </div>
+
+                            <!-- Horizon CRO Risk Gate -->
+                            <div class="dag-node" id="node-cro_risk" data-system="horizon" data-title="quant.cro_gate">
+                                <div class="node-port port-in" id="port-in-cro_risk"></div>
+                                <div class="node-badge badge-router">GATE</div>
+                                <div class="node-title">quant.cro_gate</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>circuit</span><strong class="text-emerald">ARMED</strong></div>
+                                    <div class="p-row"><span>margin_max</span><strong>28.5% / 50%</strong></div>
+                                    <div class="p-row"><span>loss_limit</span><strong>₹10,000</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-cro_risk"></div>
+                            </div>
+
+                            <!-- SRE Sentinel Filter -->
+                            <div class="dag-node" id="node-sre_filter" data-system="sre" data-title="sre.event_filter">
+                                <div class="node-port port-in" id="port-in-sre_filter"></div>
+                                <div class="node-badge badge-router">FILTER</div>
+                                <div class="node-title">sre.event_filter</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>filter</span><strong>die,oom,unhealthy</strong></div>
+                                    <div class="p-row"><span>anomalies</span><strong class="text-emerald">0 active</strong></div>
+                                    <div class="p-row"><span>throttle</span><strong>10/min</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-sre_filter"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: COGNITIVE AGENTS & ENGINES -->
+                    <div class="stage-column" data-stage-id="agents">
+                        <div class="stage-header">
+                            <span class="stage-num">03</span>
+                            <span class="stage-name">COGNITIVE AGENTS</span>
+                        </div>
+                        <div class="nodes-container">
+                            <!-- Dr. Popper Auditor -->
+                            <div class="dag-node" id="node-popper_audit" data-system="horizon" data-title="quant.dr_popper">
+                                <div class="node-port port-in" id="port-in-popper_audit"></div>
+                                <div class="node-badge badge-agent">AUDITOR</div>
+                                <div class="node-title">quant.dr_popper</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>lookahead</span><strong class="text-emerald">clean</strong></div>
+                                    <div class="p-row"><span>curve_fit</span><strong class="text-emerald">passed</strong></div>
+                                    <div class="p-row"><span>confidence</span><strong>96.4%</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-popper_audit"></div>
+                            </div>
+
+                            <!-- Sinclair Greeks Specialist -->
+                            <div class="dag-node" id="node-sinclair_greeks" data-system="horizon" data-title="quant.sinclair">
+                                <div class="node-port port-in" id="port-in-sinclair_greeks"></div>
+                                <div class="node-badge badge-agent">GREEKS</div>
+                                <div class="node-title">quant.sinclair</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>delta_bias</span><strong class="text-amber">+0.04</strong></div>
+                                    <div class="p-row"><span>theta_decay</span><strong class="text-emerald">+₹4,200/d</strong></div>
+                                    <div class="p-row"><span>vega_exp</span><strong>-₹1,250</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-sinclair_greeks"></div>
+                            </div>
+
+                            <!-- HolyArrs Media Engine -->
+                            <div class="dag-node" id="node-holyarrs_engine" data-system="holyarrs" data-title="media.holyarrs">
+                                <div class="node-port port-in" id="port-in-holyarrs_engine"></div>
+                                <div class="node-badge badge-agent">MEDIA SUITE</div>
+                                <div class="node-title">media.holyarrs</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>v3_api</span><strong class="text-emerald">emulated</strong></div>
+                                    <div class="p-row"><span>qbittorrent</span><strong>connected</strong></div>
+                                    <div class="p-row"><span>download_rate</span><strong>42 MB/s</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-holyarrs_engine"></div>
+                            </div>
+
+                            <!-- SRE Diagnostician Agent -->
+                            <div class="dag-node" id="node-sre_diagnostician" data-system="sre" data-title="sre.diagnostician">
+                                <div class="node-port port-in" id="port-in-sre_diagnostician"></div>
+                                <div class="node-badge badge-agent">SRE AI</div>
+                                <div class="node-title">sre.diagnostician</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>reasoning</span><strong>qwen2.5:14b</strong></div>
+                                    <div class="p-row"><span>auto_heal</span><strong class="text-emerald">armed</strong></div>
+                                    <div class="p-row"><span>cluster_health</span><strong class="text-emerald">100%</strong></div>
+                                </div>
+                                <div class="node-port port-out" id="port-out-sre_diagnostician"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: DISPATCH & SINKS -->
+                    <div class="stage-column" data-stage-id="sinks">
+                        <div class="stage-header">
+                            <span class="stage-num">04</span>
+                            <span class="stage-name">DISPATCH & SINKS</span>
+                        </div>
+                        <div class="nodes-container">
+                            <!-- Telegram Dispatch Node -->
+                            <div class="dag-node" id="node-tg_dispatch" data-system="telegram" data-title="telegram.dispatch">
+                                <div class="node-port port-in" id="port-in-tg_dispatch"></div>
+                                <div class="node-badge badge-sink">DISPATCH</div>
+                                <div class="node-title">telegram.dispatch</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>tts_voice</span><strong>OpenTTS (Glow)</strong></div>
+                                    <div class="p-row"><span>format</span><strong>audio/wav + MD</strong></div>
+                                    <div class="p-row"><span>last_send</span><strong class="text-emerald">200 OK</strong></div>
+                                </div>
+                            </div>
+
+                            <!-- Horizon Order Sink -->
+                            <div class="dag-node" id="node-horizon_order" data-system="horizon" data-title="horizon.order_sink">
+                                <div class="node-port port-in" id="port-in-horizon_order"></div>
+                                <div class="node-badge badge-sink">GATEWAY</div>
+                                <div class="node-title">horizon.order_sink</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>net_pnl</span><strong class="text-emerald">+₹14,250</strong></div>
+                                    <div class="p-row"><span>margin_used</span><strong>28.5%</strong></div>
+                                    <div class="p-row"><span>hedged</span><strong class="text-emerald">100% delta</strong></div>
+                                </div>
+                            </div>
+
+                            <!-- Media Transmission Sink -->
+                            <div class="dag-node" id="node-transmission_sink" data-system="holyarrs" data-title="transmission.sink">
+                                <div class="node-port port-in" id="port-in-transmission_sink"></div>
+                                <div class="node-badge badge-sink">TRANSMISSION</div>
+                                <div class="node-title">transmission.sink</div>
+                                <div class="node-params">
+                                    <div class="p-row"><span>client</span><strong>qBittorrent</strong></div>
+                                    <div class="p-row"><span>active_torrents</span><strong>12 items</strong></div>
+                                    <div class="p-row"><span>disk_free</span><strong>1.4 TB</strong></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </main>
 
-                        <div class="directive-block">
-                            <label class="section-label">FLOW PAYLOAD</label>
-                            <pre id="ingress-payload" class="code-block monospace">{}</pre>
-                        </div>
+            <!-- Right Deck: Node Inspector & Agent Bento (280px) -->
+            <aside class="right-deck">
+                <!-- Inspector Header -->
+                <div class="deck-section-title">NODE TELEMETRY INSPECTOR</div>
+
+                <!-- Inspector Card -->
+                <div class="inspector-card" id="inspectorCard">
+                    <div class="ins-title-row">
+                        <span class="ins-node-id" id="insNodeId">telegram.ingress</span>
+                        <span class="ins-type-pill" id="insNodeType">INGRESS</span>
+                    </div>
+                    <div class="ins-detail-rows">
+                        <div class="ins-row"><span>SYSTEM OWNER</span><strong id="insSystem">Telegram AI OS</strong></div>
+                        <div class="ins-row"><span>EXECUTION TIME</span><strong id="insLatency">1.2 ms</strong></div>
+                        <div class="ins-row"><span>LAST EVENT</span><strong id="insLastEvent">06:42:10 IST</strong></div>
+                        <div class="ins-row"><span>CIRCUIT STATUS</span><strong class="text-emerald" id="insCircuit">NOMINAL</strong></div>
+                    </div>
+                    <div class="ins-payload-box">
+                        <div class="payload-header">LIVE PAYLOAD PREVIEW</div>
+                        <pre class="payload-code" id="insPayload">{
+  "flow": "telegram_message",
+  "chat_id": 1119935406,
+  "command": "/trade_diary",
+  "status": "PROCESSED",
+  "agent": "Qwen 14B"
+}</pre>
+                    </div>
+                    <button class="btn-trigger" id="btnEmitPulse">EMIT TEST PULSE ⚡</button>
+                </div>
+
+                <!-- Fleet Agent Summary Cards -->
+                <div class="deck-section-title" style="margin-top: 8px;">FLEET OVERVIEW</div>
+                <div class="agent-bento-grid">
+                    <div class="bento-tile bento-tg">
+                        <div class="b-header"><span>Telegram AI OS</span><span class="b-status active">ACTIVE</span></div>
+                        <div class="b-row"><span>Latency</span><strong>340ms</strong></div>
+                        <div class="b-row"><span>Last Action</span><strong>Voice Note Sent</strong></div>
+                    </div>
+                    <div class="bento-tile bento-horizon">
+                        <div class="b-header"><span>Horizon Quant</span><span class="b-status active">HEDGED</span></div>
+                        <div class="b-row"><span>Open PnL</span><strong class="text-emerald">+₹14,250</strong></div>
+                        <div class="b-row"><span>Delta Bias</span><strong>+0.04</strong></div>
+                    </div>
+                    <div class="bento-tile bento-holy">
+                        <div class="b-header"><span>HolyArrs Media</span><span class="b-status active">UNIFIED</span></div>
+                        <div class="b-row"><span>Active Rate</span><strong>42 MB/s</strong></div>
+                        <div class="b-row"><span>Memory</span><strong>210 MiB (Low)</strong></div>
+                    </div>
+                    <div class="bento-tile bento-sre">
+                        <div class="b-header"><span>SRE Sentinel</span><span class="b-status active">HEALTHY</span></div>
+                        <div class="b-row"><span>Containers</span><strong>28 UP / 0 DOWN</strong></div>
+                        <div class="b-row"><span>Uptime</span><strong>99.98%</strong></div>
                     </div>
                 </div>
             </aside>
+        </div>
 
-            <!-- Center Stage: The 60 FPS Neural Canvas Graph -->
-            <section class="center-canvas-panel">
-                <div class="canvas-header-overlay">
-                    <div class="graph-legend">
-                        <span class="legend-item"><span class="legend-bullet input"></span> Trigger Ingress</span>
-                        <span class="legend-item"><span class="legend-bullet agent"></span> AI Agent / Persona</span>
-                        <span class="legend-item"><span class="legend-bullet worker"></span> Worker Pipeline</span>
-                        <span class="legend-item"><span class="legend-bullet sink"></span> Dispatch / Sink</span>
-                    </div>
-                    <div class="canvas-quick-actions">
-                        <button id="btn-recenter" class="icon-btn" title="Recenter Graph">⤢</button>
-                    </div>
-                </div>
-                <div class="canvas-wrapper">
-                    <canvas id="neuralCanvas"></canvas>
-                </div>
-            </section>
-
-            <!-- Right Micro-Agent Bento Cards -->
-            <aside class="sidebar-deck right-side">
-                <div class="glass-card full-height">
-                    <div class="card-header">
-                        <span class="header-tag">MONITOR</span>
-                        <h3 class="header-heading">Agent Bento Grid</h3>
-                        <span class="badge-count" id="agent-active-count">6 ACTIVE</span>
-                    </div>
-                    <div id="bento-container" class="card-body bento-list scrollable">
-                        <!-- Modern Bento Cards Injected Here -->
-                    </div>
-                </div>
-            </aside>
-        </main>
-
-        <!-- Bottom Single-Page Deck: Matrix & Terminal -->
+        <!-- 3. BOTTOM HIGH-CONTRAST DOCK (TELEMETRY MATRIX + EVENT STREAM) -->
         <footer class="bottom-dock">
-            <!-- Left Matrix Heatmap -->
-            <div class="dock-panel matrix-dock">
+            <!-- Telemetry Matrix: 16 True Semantic System Metric Tiles -->
+            <div class="dock-matrix-box">
                 <div class="dock-header">
-                    <div class="dock-title-group">
-                        <span class="header-tag">MATRIX</span>
-                        <h4 id="matrix-title" class="dock-title">EXECUTION HEATMAP</h4>
-                    </div>
-                    <span id="matrix-subtext" class="subtext-pill">24 TILES</span>
+                    <span class="dock-title">HOMELAB MESH TELEMETRY</span>
+                    <span class="dock-sub">16 SUBSYSTEMS MONITORED</span>
                 </div>
-                <div id="matrix-grid" class="matrix-tiles-container">
-                    <!-- Dynamic Matrix Tiles Injected Here -->
+                <div class="telemetry-grid">
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">TG-POLL</span><span class="cell-val">340ms</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">TG-DISP</span><span class="cell-val">200 OK</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">QWEN-14B</span><span class="cell-val">320ms</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">RADEON</span><span class="cell-val">890M</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOR-REDP</span><span class="cell-val">0 lag</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOR-GREEK</span><span class="cell-val">+0.04</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOR-PNL</span><span class="cell-val">+₹14k</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOR-GATE</span><span class="cell-val">PASS</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOLY-ROUT</span><span class="cell-val">ACTIVE</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOLY-QBIT</span><span class="cell-val">42MB/s</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">HOLY-RAM</span><span class="cell-val">-940M</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">DOCKER</span><span class="cell-val">28 UP</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">SENTINEL</span><span class="cell-val">0 err</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">N8N-CRON</span><span class="cell-val">ACTIVE</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">OPENTTS</span><span class="cell-val">READY</span></div>
+                    <div class="telemetry-cell cell-ok"><span class="cell-tag">SQLITE-WAL</span><span class="cell-val">SYNCED</span></div>
                 </div>
             </div>
 
-            <!-- Right Cybernetic Terminal Stream -->
-            <div class="dock-panel terminal-dock">
+            <!-- Real-Time Event & Reasoning Console Stream -->
+            <div class="dock-console-box">
                 <div class="dock-header">
-                    <div class="dock-title-group">
-                        <span class="header-tag">STREAM</span>
-                        <h4 class="dock-title">EVENT & REASONING CONSOLE</h4>
+                    <div class="console-header-left">
+                        <span class="dock-title">HOMELAB EVENT & REASONING STREAM</span>
+                        <div class="log-filter-chips">
+                            <button class="chip-filter active" data-filter="all">ALL</button>
+                            <button class="chip-filter" data-filter="telegram">TG</button>
+                            <button class="chip-filter" data-filter="horizon">HORIZON</button>
+                            <button class="chip-filter" data-filter="holyarrs">MEDIA</button>
+                            <button class="chip-filter" data-filter="sre">SRE</button>
+                        </div>
                     </div>
-                    <button id="btn-clear-log" class="glass-btn-xs">CLEAR</button>
+                    <button class="btn-clear-logs" id="btnClearTerminal">CLEAR</button>
                 </div>
-                <div id="terminal-stream" class="terminal-body monospace">
-                    <!-- Live Logs Injected Here -->
+                <div class="console-stream" id="consoleStream">
+                    <div class="log-row log-tg"><span class="log-time">12:15:01</span><span class="log-tag tag-tg">[TELEGRAM]</span><span class="log-msg">CinemaScout polling loop active. Listening on chat 1119935406.</span></div>
+                    <div class="log-row log-horizon"><span class="log-time">12:15:02</span><span class="log-tag tag-horizon">[HORIZON]</span><span class="log-msg">Options risk calculation complete: Delta +0.04, Theta +₹4,200/day. Hedged.</span></div>
+                    <div class="log-row log-holyarrs"><span class="log-time">12:15:03</span><span class="log-tag tag-holyarrs">[HOLYARRS]</span><span class="log-msg">Consolidated media gateway operational. Proxying Radarr/Sonarr requests directly to transmission.</span></div>
+                    <div class="log-row log-sre"><span class="log-time">12:15:04</span><span class="log-tag tag-sre">[SENTINEL]</span><span class="log-msg">Socket audit: 28/28 containers healthy. Zero restart loops or OOM kills detected.</span></div>
                 </div>
             </div>
         </footer>
     </div>
 
-    <!-- Scripts -->
-    <script src="/static/js/neural_graph.js?v=2"></script>
-    <script src="/static/js/app.js?v=2"></script>
+    <!-- Application Script -->
+    <script src="/static/js/app.js?v=4"></script>
 </body>
 </html>
