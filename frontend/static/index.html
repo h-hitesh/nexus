@@ -3,161 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS // Autonomous Cognitive Execution Plane</title>
+    <title>NEXUS // Autonomous Multi-System Execution Plane</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
-<body class="cyber-theme">
-    <div class="hud-frame">
-        <!-- Corner Reticles -->
-        <div class="corner-reticle top-left"></div>
-        <div class="corner-reticle top-right"></div>
-        <div class="corner-reticle bottom-left"></div>
-        <div class="corner-reticle bottom-right"></div>
+<body class="modern-cyber-body">
+    <!-- Ambient Radial Glows -->
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
 
-        <!-- Top Mission Navigation -->
-        <header class="hud-header">
-            <div class="brand-section">
-                <span class="brand-glyph">⬡</span>
-                <span class="brand-title">NEXUS</span>
-                <span class="brand-badge">CONTROL PLANE</span>
-            </div>
-
-            <div class="project-selector-wrapper">
-                <span class="hud-label">ACTIVE SYSTEM:</span>
-                <select id="project-select" class="hud-select">
-                    <option value="horizon_quant">📈 Horizon Quant Lab & Council</option>
-                    <option value="media_stack">🎬 CinemaScout & HolyArrs Pipeline</option>
-                    <option value="sre_sentinel">🛡️ Homelab SRE Sentinel</option>
-                </select>
-            </div>
-
-            <div class="mode-toggles">
-                <button id="btn-mode-live" class="hud-tab active">
-                    <span class="pulse-indicator live"></span> LIVE STREAM
-                </button>
-                <button id="btn-mode-replay" class="hud-tab">
-                    <span class="pulse-indicator history"></span> TIME-TRAVEL REPLAY
-                </button>
-            </div>
-
-            <div class="telemetry-bar">
-                <div class="telemetry-chip">
-                    <span class="chip-title">LINK</span>
-                    <span id="ws-status" class="chip-val status-online">CONNECTED</span>
+    <div class="app-shell">
+        <!-- Top Glass Navigation Bar -->
+        <header class="glass-header">
+            <div class="header-left">
+                <div class="brand-container">
+                    <div class="brand-icon-box">
+                        <span class="brand-logo-hex">⬡</span>
+                    </div>
+                    <div class="brand-text-block">
+                        <span class="brand-title">NEXUS</span>
+                        <span class="brand-subtitle">AI OS // EXECUTION PLANE</span>
+                    </div>
                 </div>
-                <div class="telemetry-chip">
-                    <span class="chip-title">FPS</span>
-                    <span id="fps-counter" class="chip-val">60</span>
+
+                <!-- Modern Segmented Pill Control (NO DROPDOWN!) -->
+                <nav class="pipeline-nav">
+                    <button class="nav-pill active" data-flow="all">
+                        <span class="pill-dot all"></span> All Systems
+                    </button>
+                    <button class="nav-pill" data-flow="telegram">
+                        <span class="pill-dot tg"></span> Telegram AI OS
+                    </button>
+                    <button class="nav-pill" data-flow="horizon">
+                        <span class="pill-dot quant"></span> Horizon Quant
+                    </button>
+                    <button class="nav-pill" data-flow="media">
+                        <span class="pill-dot media"></span> HolyArrs Media
+                    </button>
+                    <button class="nav-pill" data-flow="sre">
+                        <span class="pill-dot sre"></span> SRE Sentinel
+                    </button>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <!-- Mode Switcher Pill -->
+                <div class="segmented-mode">
+                    <button id="btn-mode-live" class="mode-btn active">
+                        <span class="live-dot"></span> LIVE
+                    </button>
+                    <button id="btn-mode-replay" class="mode-btn">
+                        <span>⏱ REPLAY</span>
+                    </button>
                 </div>
-                <div class="telemetry-chip">
-                    <span class="chip-title">CLOCK</span>
-                    <span id="hud-clock" class="chip-val monospace">--:--:--</span>
+
+                <div class="system-stats-cluster">
+                    <div class="stat-pill">
+                        <span class="stat-label">STATUS</span>
+                        <span id="ws-status" class="stat-value status-online">CONNECTED</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-label">CLOCK</span>
+                        <span id="hud-clock" class="stat-value monospace">--:--:--</span>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- Replay Bar (Shown when in Replay Mode) -->
-        <div id="replay-deck" class="replay-deck hidden">
-            <div class="replay-controls">
-                <button id="replay-play-btn" class="ctrl-btn">▶ PLAY</button>
-                <button id="replay-step-back" class="ctrl-btn">⏮</button>
-                <button id="replay-step-fwd" class="ctrl-btn">⏭</button>
-                <select id="replay-session-select" class="hud-select session-picker">
-                    <option value="">Select Past Event / Session...</option>
-                </select>
-            </div>
-            <div class="replay-timeline">
-                <input type="range" id="replay-slider" min="0" max="100" value="0" class="hud-slider">
-                <div class="timeline-labels">
-                    <span id="replay-time-current">00:00.000</span>
-                    <span id="replay-event-count">0 / 0 Events</span>
-                    <span id="replay-time-total">00:00.000</span>
+        <!-- Floating Time-Travel Replay Bar (Glass Bar) -->
+        <div id="replay-bar" class="replay-glass-bar hidden">
+            <div class="replay-inner">
+                <div class="replay-actions">
+                    <button id="replay-play-btn" class="replay-action-btn primary">
+                        <span id="play-icon">▶</span> <span id="play-text">PLAY</span>
+                    </button>
+                    <button id="replay-step-back" class="replay-action-btn icon-only">⏮</button>
+                    <button id="replay-step-fwd" class="replay-action-btn icon-only">⏭</button>
+                    <div class="custom-select-wrapper">
+                        <select id="replay-session-select" class="glass-select">
+                            <option value="">Select past execution session...</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="replay-speed">
-                <button class="speed-btn active" data-speed="1">1x</button>
-                <button class="speed-btn" data-speed="2">2x</button>
-                <button class="speed-btn" data-speed="5">5x</button>
+
+                <div class="replay-scrubber-track">
+                    <div class="scrubber-top">
+                        <span id="replay-session-name" class="session-label">Session: None</span>
+                        <span id="replay-event-counter" class="event-counter">0 / 0 Events</span>
+                    </div>
+                    <input type="range" id="replay-slider" min="0" max="100" value="0" class="neon-slider">
+                </div>
+
+                <div class="replay-speed-group">
+                    <button class="speed-pill active" data-speed="1">1x</button>
+                    <button class="speed-pill" data-speed="2">2x</button>
+                    <button class="speed-pill" data-speed="5">5x</button>
+                </div>
             </div>
         </div>
 
-        <!-- Main Dashboard Viewport -->
-        <main class="hud-viewport">
-            <!-- Left Deck: Inputs & Directives -->
-            <aside class="panel left-deck">
-                <div class="panel-header">
-                    <span class="panel-tag">[DIRECTIVES]</span>
-                    <span class="panel-title">SYSTEM INGRESS</span>
-                </div>
-                <div class="panel-content">
-                    <div class="directive-box">
-                        <div class="box-label">CURRENT BRIEF</div>
-                        <div id="ingress-brief" class="box-content monospace">Waiting for system event trigger...</div>
+        <!-- Master Viewport Grid -->
+        <main class="master-viewport">
+            <!-- Left Directive & Telemetry Cards -->
+            <aside class="sidebar-deck left-side">
+                <div class="glass-card full-height">
+                    <div class="card-header">
+                        <span class="header-tag">INGRESS</span>
+                        <h3 class="header-heading">Flow Directive</h3>
+                        <span id="active-flow-badge" class="flow-pill-badge">ALL SYSTEMS</span>
                     </div>
-                    <div class="directive-box">
-                        <div class="box-label">INPUT PAYLOAD</div>
-                        <div id="ingress-payload" class="box-content monospace json-view">{}</div>
-                    </div>
-                    <div class="directive-box">
-                        <div class="box-label">ACTIVE RISK & CONSTRAINTS</div>
-                        <div id="ingress-constraints" class="box-content">
-                            <div class="param-row"><span>Loss Limit:</span> <strong class="text-amber">₹25,000</strong></div>
-                            <div class="param-row"><span>Max Execution Latency:</span> <strong>50ms</strong></div>
-                            <div class="param-row"><span>Gate Policy:</span> <strong class="text-green">STRICT_AUDIT</strong></div>
+                    <div class="card-body scrollable">
+                        <div class="directive-block">
+                            <label class="section-label">ACTIVE OBJECTIVE</label>
+                            <p id="ingress-brief" class="directive-text">
+                                Monitoring unified homelab neural mesh across Telegram AI OS, Horizon Quant Council, HolyArrs Media Pipeline, and SRE Sentinel.
+                            </p>
+                        </div>
+
+                        <div class="directive-block">
+                            <label class="section-label">LIVE FLOW METRICS</label>
+                            <div class="metric-tiles-grid">
+                                <div class="metric-mini-tile">
+                                    <span class="tile-label">FLOW NODES</span>
+                                    <span id="stat-node-count" class="tile-val">18</span>
+                                </div>
+                                <div class="metric-mini-tile">
+                                    <span class="tile-label">LINK LATENCY</span>
+                                    <span class="tile-val text-green">1.2 ms</span>
+                                </div>
+                                <div class="metric-mini-tile">
+                                    <span class="tile-label">EVENT PULSES</span>
+                                    <span id="stat-pulse-count" class="tile-val text-cyan">42</span>
+                                </div>
+                                <div class="metric-mini-tile">
+                                    <span class="tile-label">AI ENGINE</span>
+                                    <span class="tile-val text-amber">Qwen 14B</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="directive-block">
+                            <label class="section-label">FLOW PAYLOAD</label>
+                            <pre id="ingress-payload" class="code-block monospace">{}</pre>
                         </div>
                     </div>
                 </div>
             </aside>
 
-            <!-- Center Stage: The Neural Canvas Graph -->
-            <section class="panel center-stage">
-                <div class="panel-header">
-                    <span class="panel-tag">[COGNITIVE GRAPH]</span>
-                    <span class="panel-title">TOPOLOGY & EXECUTION STREAM</span>
-                    <span id="graph-node-count" class="badge-mini">0 NODES</span>
+            <!-- Center Stage: The 60 FPS Neural Canvas Graph -->
+            <section class="center-canvas-panel">
+                <div class="canvas-header-overlay">
+                    <div class="graph-legend">
+                        <span class="legend-item"><span class="legend-bullet input"></span> Trigger Ingress</span>
+                        <span class="legend-item"><span class="legend-bullet agent"></span> AI Agent / Persona</span>
+                        <span class="legend-item"><span class="legend-bullet worker"></span> Worker Pipeline</span>
+                        <span class="legend-item"><span class="legend-bullet sink"></span> Dispatch / Sink</span>
+                    </div>
+                    <div class="canvas-quick-actions">
+                        <button id="btn-recenter" class="icon-btn" title="Recenter Graph">⤢</button>
+                    </div>
                 </div>
-                <div class="canvas-container">
+                <div class="canvas-wrapper">
                     <canvas id="neuralCanvas"></canvas>
                 </div>
             </section>
 
-            <!-- Right Deck: Micro-Agent Bento Grid -->
-            <aside class="panel right-deck">
-                <div class="panel-header">
-                    <span class="panel-tag">[WORKERS]</span>
-                    <span class="panel-title">AGENT STATUS MATRIX</span>
-                </div>
-                <div id="bento-container" class="panel-content bento-grid">
-                    <!-- Dynamic Bento Cards Injected Here -->
+            <!-- Right Micro-Agent Bento Cards -->
+            <aside class="sidebar-deck right-side">
+                <div class="glass-card full-height">
+                    <div class="card-header">
+                        <span class="header-tag">MONITOR</span>
+                        <h3 class="header-heading">Agent Bento Grid</h3>
+                        <span class="badge-count" id="agent-active-count">6 ACTIVE</span>
+                    </div>
+                    <div id="bento-container" class="card-body bento-list scrollable">
+                        <!-- Modern Bento Cards Injected Here -->
+                    </div>
                 </div>
             </aside>
         </main>
 
-        <!-- Bottom Deck: Dynamic Matrix & Streaming Console -->
-        <footer class="hud-bottom-deck">
-            <!-- Left Sub-panel: N-Cell Execution Heatmap -->
-            <div class="bottom-panel matrix-panel">
-                <div class="panel-header">
-                    <span class="panel-tag">[MATRIX]</span>
-                    <span id="matrix-title" class="panel-title">EXECUTION HEATMAP</span>
+        <!-- Bottom Single-Page Deck: Matrix & Terminal -->
+        <footer class="bottom-dock">
+            <!-- Left Matrix Heatmap -->
+            <div class="dock-panel matrix-dock">
+                <div class="dock-header">
+                    <div class="dock-title-group">
+                        <span class="header-tag">MATRIX</span>
+                        <h4 id="matrix-title" class="dock-title">EXECUTION HEATMAP</h4>
+                    </div>
+                    <span id="matrix-subtext" class="subtext-pill">24 TILES</span>
                 </div>
-                <div id="matrix-grid" class="matrix-grid-container">
-                    <!-- Dynamic 24-cell matrix injected here -->
+                <div id="matrix-grid" class="matrix-tiles-container">
+                    <!-- Dynamic Matrix Tiles Injected Here -->
                 </div>
             </div>
 
-            <!-- Right Sub-panel: Live Streaming Terminal -->
-            <div class="bottom-panel terminal-panel">
-                <div class="panel-header">
-                    <span class="panel-tag">[TELEMETRY CONSOLE]</span>
-                    <span class="panel-title">EVENT LOG STREAM</span>
-                    <button id="btn-clear-log" class="btn-text">CLEAR</button>
+            <!-- Right Cybernetic Terminal Stream -->
+            <div class="dock-panel terminal-dock">
+                <div class="dock-header">
+                    <div class="dock-title-group">
+                        <span class="header-tag">STREAM</span>
+                        <h4 class="dock-title">EVENT & REASONING CONSOLE</h4>
+                    </div>
+                    <button id="btn-clear-log" class="glass-btn-xs">CLEAR</button>
                 </div>
-                <div id="terminal-stream" class="terminal-container monospace">
-                    <!-- Streaming log entries injected here -->
+                <div id="terminal-stream" class="terminal-body monospace">
+                    <!-- Live Logs Injected Here -->
                 </div>
             </div>
         </footer>
